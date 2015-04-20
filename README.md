@@ -1,1 +1,1 @@
-# EventRegistrationApplicatio
+# EventRegistrationApplication
