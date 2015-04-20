@@ -11,8 +11,9 @@
     <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/file/css/style.css" rel="stylesheet" />
     <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/file/css/main-style.css" rel="stylesheet" />
     <!-- Page-Level CSS -->
-    <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/file/plugins/morris/morris-0.4.3.min.css" rel="stylesheet" />
+    <!-- <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/file/plugins/morris/morris-0.4.3.min.css" rel="stylesheet" /> -->
     <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/file/css/cutomStyle.css" rel="stylesheet" />
+    <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/style.css" rel="stylesheet" />
    </head>
 <body>
     <!--  wrapper -->
@@ -161,15 +162,15 @@
     <!-- end wrapper -->
 
     <!-- Core Scripts - Include with every page -->
-    <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/file/plugins/jquery-1.10.2.js"></script>
+    <!-- <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/file/plugins/jquery-1.10.2.js"></script> -->
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/file/plugins/bootstrap/bootstrap.min.js"></script>
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/file/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/file/plugins/pace/pace.js"></script>
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/file/scripts/siminta.js"></script>
     <!-- Page-Level Plugin Scripts-->
-    <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/file/plugins/morris/raphael-2.1.0.min.js"></script>
+    <!-- <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/file/plugins/morris/raphael-2.1.0.min.js"></script>
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/file/plugins/morris/morris.js"></script>
-    <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/file/scripts/dashboard-demo.js"></script>
+    <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/file/scripts/dashboard-demo.js"></script> -->
 
 </body>
 

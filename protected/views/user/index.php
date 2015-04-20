@@ -12,6 +12,6 @@ array('label'=>'Manage User','url'=>array('admin')),
 <h1>Users</h1>
 
 <?php $this->widget('booster.widgets.TbListView',array(
-'dataProvider'=>$dataProvider,
-'itemView'=>'_view',
+	'dataProvider'=>$dataProvider,
+	'itemView'=>'_view',
 )); ?>
