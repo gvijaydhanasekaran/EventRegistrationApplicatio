@@ -70,6 +70,25 @@
 
 	<?php //echo $form->textFieldGroup($model,'modifiedAt',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5')))); ?>
 
+	<?php
+        if($model->id){
+            $selectedEvents = array_keys(CHtml::listData( StudentEvents::model()->findAllByAttributes(array('studentId'=>$model->id)), 'eventId' , 'eventId'));
+            
+            $ugEvents = Event::model()->findAllByAttributes(array('courseId'=>$model->courseId));
+        }else{
+            $selectedEvents=array();
+
+            $ugEvents = Event::model()->findAllByAttributes(array('courseId'=>1));
+        }
+    ?>
+
+	<div class="form-group">
+		<?php echo $form -> labelEx($model, 'events', array('class' => 'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php echo CHtml::checkBoxList('selectedEvents', $selectedEvents, CHtml::listData($ugEvents,'id','eventname')); ?>
+		</div>
+	</div>
+
 	<?php echo $form->dropDownListGroup($model,'status', array('widgetOptions'=>array('data'=>array("A"=>"Active","I"=>"In Active",), 'htmlOptions'=>array('class'=>'input-large')))); ?>
 
 <div class="form-actions">
@@ -81,3 +100,19 @@
 </div>
 
 <?php $this->endWidget(); ?>
+
+<script type="text/javascript">
+	$(document).on('change','#courseId',function(){
+        $.ajax({
+            type:"POST",
+            url:"<?php echo Yii::app()->createUrl('student/ajaxgetcourseevents'); ?>",
+            data:{'data':$("#courseId").val()},
+            dataType:"json",
+            success:function(data){
+            	if (data) {
+            		$('#selectedEvents').html(data);
+            	}
+            },
+		});		
+	});
+</script>

@@ -31,7 +31,7 @@ class StudentController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'ajaxgetcourseevents'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -62,6 +62,7 @@ class StudentController extends Controller
 	public function actionCreate()
 	{
 		$model=new Student;
+		$model->courseId = 1;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -70,10 +71,27 @@ class StudentController extends Controller
 		{
 			$model->attributes=$_POST['Student'];
 			if($model->save()){
+
+				// Student events save start
+				if(!empty($_POST['selectedEvents'])){
+					$eventsArray = $_POST['selectedEvents'];
+
+					foreach ($eventsArray as $eventId) {
+						$result = Event::model()->findByAttributes(array('id'=>$eventId));
+						if($result){
+							$studentEventModel = new StudentEvents;
+							$studentEventModel->studentId = $model->id;
+							$studentEventModel->eventId = $result->id;
+							$studentEventModel->save(false);
+						}
+					}
+				}
+				// Student events save end
+
 				// Yii Flash Message starts (will show on layouts/main)
 				if($model->studentname){
-				$msg = 'Student <b>"' . $model->studentname . '"</b> saved successfully!';
-				Yii::app()->user->setFlash('success', $msg);
+					$msg = 'Student <b>"' . $model->studentname . '"</b> saved successfully!';
+					Yii::app()->user->setFlash('success', $msg);
 				}
 				// Yii Flash Message ends (will show on layouts/main)
 				$this -> redirect(array('admin'));
@@ -101,6 +119,24 @@ class StudentController extends Controller
 		{
 			$model->attributes=$_POST['Student'];
 			if($model->save()){
+				StudentEvents::model()->deleteAll("studentId ='$model->id'");
+
+				// Student events save start
+				if(!empty($_POST['selectedEvents'])){
+					$eventsArray = $_POST['selectedEvents'];
+
+					foreach ($eventsArray as $eventId) {
+						$result = Event::model()->findByAttributes(array('id'=>$eventId));
+						if($result){
+							$studentEventModel = new StudentEvents;
+							$studentEventModel->studentId = $model->id;
+							$studentEventModel->eventId = $result->id;
+							$studentEventModel->save(false);
+						}
+					}
+				}
+				// Student events save end
+
 				// Yii Flash Message starts (will show on layouts/main)
 				if($model->studentname){
 				$msg = 'Paricipant <b>"' . $model->studentname . '"</b> updated successfully!';
@@ -198,4 +234,25 @@ class StudentController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+	public function actionAjaxGetCourseEvents()
+	{
+		$html = '';
+		if (isset($_POST['data'])) {
+			$events = Event::model()->findAllByAttributes(array('courseId' => $_POST['data']));
+
+			$i = 0;
+			foreach ($events as $event) {
+				$html .= '<input id="selectedEvents_' . $i . '" type="checkbox" name="selectedEvents[]" value="' . $event->id . '">';
+				$html .= '<label for="selectedEvents_' . $i . '">' . $event->eventname . '</label>';
+				$html .= '<br>';
+
+				$i++;
+			}
+		}
+
+		echo CJSON::encode($html);
+		Yii::app()->end();
+	}
+
 }

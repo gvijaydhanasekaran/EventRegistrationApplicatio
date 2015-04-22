@@ -47,6 +47,14 @@ class Event extends CActiveRecord
         );
     }
 
+    public function scopes() {
+        $alias = $this->getTableAlias(false);
+        return(array(
+            'pg'=>array('condition'=>$alias.'.courseId = 1'),
+            'ug'=>array('condition'=>$alias.'.courseId = 2'),
+        ));
+    }
+
 	/**
 	 * @return array validation rules for model attributes.
 	 */
