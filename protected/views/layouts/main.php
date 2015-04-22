@@ -154,6 +154,14 @@
         <!-- end navbar side -->
         <!--  page-wrapper <div id="page-wrapper"> -->
         <div id="page-wrapper">
+            <?php
+                foreach(Yii::app()->user->getFlashes() as $key => $message) {
+                    echo '<div class="alert alert-' . $key . ' alert-dismissable">
+                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                '. $message . '
+                            </div>';
+                }
+            ?>
         	<?php echo $content; ?>
         </div>
         <!-- end page-wrapper -->
@@ -171,7 +179,13 @@
     <!-- <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/file/plugins/morris/raphael-2.1.0.min.js"></script>
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/file/plugins/morris/morris.js"></script>
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/file/scripts/dashboard-demo.js"></script> -->
-
+    <?php
+        Yii::app()->clientScript->registerScript(
+           'myHideEffect',
+           '$(".alert").animate({opacity: 1.0}, 3000).fadeOut();',
+           CClientScript::POS_READY
+        );
+    ?>
 </body>
 
 </html>

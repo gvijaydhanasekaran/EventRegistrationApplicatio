@@ -69,8 +69,15 @@ class CourseController extends Controller
 		if(isset($_POST['Course']))
 		{
 			$model->attributes=$_POST['Course'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+				// Yii Flash Message starts (will show on layouts/main)
+				if($model->coursename){
+				$msg = 'Course <b>"' . $model->coursename . '"</b> saved successfully!';
+				Yii::app()->user->setFlash('success', $msg);
+				}
+				// Yii Flash Message ends (will show on layouts/main)
+				$this -> redirect(array('admin'));
+			}
 		}
 
 		$this->render('create',array(
@@ -93,8 +100,15 @@ class CourseController extends Controller
 		if(isset($_POST['Course']))
 		{
 			$model->attributes=$_POST['Course'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+				// Yii Flash Message starts (will show on layouts/main)
+				if($model->coursename){
+				$msg = 'Course "' . $model->coursename . '" Updated successfully!';
+				Yii::app()->user->setFlash('success', $msg);
+				}
+				// Yii Flash Message ends (will show on layouts/main)
+				$this -> redirect(array('admin'));
+			}
 		}
 
 		$this->render('update',array(
@@ -111,12 +125,48 @@ class CourseController extends Controller
 	{
 		if(Yii::app()->request->isPostRequest)
 		{
-			// we only allow deletion via POST request
-			$this->loadModel($id)->delete();
+
+			$model=$this -> loadModel($id);
+			
+			$eventModel = Event::model()->findByAttributes(array('courseId'=>$id));
+			$studentModel = Student::model()->findByAttributes(array('courseId'=>$id));
+			
+			if(!$eventModel && !$studentModel){
+                $model->status='D';
+				$model->save(false);
+				
+				// Yii Flash Message starts (will show on controller/admin)
+				$msg = 'Course <b>"' . $model->coursename . '"</b> deleted successfully!';
+				echo '<div class="alert alert-danger alert-dismissable">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                        '.$msg.'
+                    </div>';
+				//echo "<div id='delAlert' class='alert alert-success'>$msg<button type='button' class='close' data-dismiss='alert'>×</button></div>";
+				// Yii Flash Message ends (will show on controller/admin)
+			}elseif($eventModel && !$studentModel){
+				$msg = 'Course <b>"' . $model->coursename . '"</b> not deleted! It have Some <b>Events</b>!';
+				echo '<div class="alert alert-info alert-dismissable">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                        '.$msg.'
+                    </div>';
+			}elseif(!$eventModel && $studentModel){
+				$msg = 'Course <b>"' . $model->coursename . '"</b> not deleted! It have Some <b>Students</b>!';
+				echo '<div class="alert alert-info alert-dismissable">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                        '.$msg.'
+                    </div>';
+			}else{
+				$msg = 'Course <b>"' . $model->coursename . '"</b> not deleted! It have Some <b>Students</b> and <b>Events</b>!';
+				echo '<div class="alert alert-info alert-dismissable">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                        '.$msg.'
+                    </div>';
+			}
+			
 
 			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_GET['ajax']))
-				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			//if(!isset($_GET['ajax']))
+				//$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 		}
 		else
 			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');

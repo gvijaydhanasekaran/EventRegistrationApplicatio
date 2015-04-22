@@ -39,9 +39,10 @@ class Institute extends CActiveRecord
     {
         $alias = $this->getTableAlias(false,false).".";
         return array(
-            'condition'=>$alias.'status != "D"',
+            'condition'=>$alias.'status !="D"',
         );
     }
+    
 
 	/**
 	 * @return array validation rules for model attributes.

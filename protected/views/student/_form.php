@@ -11,9 +11,9 @@
 	<?php echo $form->textFieldGroup($model,'studentname',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5','maxlength'=>200)))); ?>
 
 	<?php //echo $form->textFieldGroup($model,'collegeId',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5')))); ?>
-	<div class="control-group">
-		<?php echo $form -> labelEx($model, 'collegeId', array('class' => 'control-label')); ?>
-		<div class="controls">
+	<div class="form-group">
+		<?php echo $form -> labelEx($model, 'collegeId', array('class' => 'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
 			<?php
 				$InstituteArray = Institute::getInstituteList();
 
@@ -37,9 +37,9 @@
 	</div>	
 
 	<?php //echo $form->textFieldGroup($model,'courseId',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5')))); ?>
-	<div class="control-group">
-		<?php echo $form -> labelEx($model, 'courseId', array('class' => 'control-label')); ?>
-		<div class="controls">
+	<div class="form-group">
+		<?php echo $form -> labelEx($model, 'courseId', array('class' => 'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
 			<?php
 				$CourseArray = Course::getCourseList();
 

@@ -39,11 +39,11 @@ class Event extends CActiveRecord
 		return 'event';
 	}
 
-    public function defaultScope()
+	public function defaultScope()
     {
         $alias = $this->getTableAlias(false,false).".";
         return array(
-            'condition'=>$alias.'status != "D"',
+            'condition'=>$alias.'status !="D"',
         );
     }
 

@@ -69,8 +69,15 @@ class InstituteController extends Controller
 		if(isset($_POST['Institute']))
 		{
 			$model->attributes=$_POST['Institute'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+				// Yii Flash Message starts (will show on layouts/main)
+				if($model->institutename){
+				$msg = 'Institute "' . $model->institutename . '" saved successfully!';
+				Yii::app()->user->setFlash('success', $msg);
+				}
+				// Yii Flash Message ends (will show on layouts/main)
+				$this -> redirect(array('admin'));
+			}
 		}
 
 		$this->render('create',array(
@@ -93,8 +100,15 @@ class InstituteController extends Controller
 		if(isset($_POST['Institute']))
 		{
 			$model->attributes=$_POST['Institute'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+				// Yii Flash Message starts (will show on layouts/main)
+				if($model->institutename){
+				$msg = 'Institute "' . $model->institutename . '" updated successfully!';
+				Yii::app()->user->setFlash('success', $msg);
+				}
+				// Yii Flash Message ends (will show on layouts/main)
+				$this -> redirect(array('admin'));
+			}
 		}
 
 		$this->render('update',array(
@@ -111,12 +125,36 @@ class InstituteController extends Controller
 	{
 		if(Yii::app()->request->isPostRequest)
 		{
-			// we only allow deletion via POST request
-			$this->loadModel($id)->delete();
+			$model=$this -> loadModel($id);
+			
+			$instituteModel = Student::model()->findByAttributes(array('collegeId'=>$id));
+			
+			if(!$instituteModel){
+                $model->status='D';
+				$model->save(false);
+				
+				// Yii Flash Message starts (will show on controller/admin)
+				$msg = 'Institute "' . $model->institutename . '" deleted successfully!';
+				echo '<div class="alert alert-danger alert-dismissable">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                        '.$msg.'
+                    </div>';
+				//echo "<div id='delAlert' class='alert alert-success'>$msg<button type='button' class='close' data-dismiss='alert'>×</button></div>";
+				// Yii Flash Message ends (will show on controller/admin)
+			}else{
+				// Yii Flash Message starts (will show on controller/admin)
+				$msg = 'Institute "' . $model->institutename . '" not deleted! It have Some <b>Students</b>!';
+				echo '<div class="alert alert-info alert-dismissable">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                        '.$msg.'
+                    </div>';
+				//echo "<div id='delAlert' class='alert alert-success'>$msg<button type='button' class='close' data-dismiss='alert'>×</button></div>";
+				// Yii Flash Message ends (will show on controller/admin)
+			}
 
 			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_GET['ajax']))
-				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			//if(!isset($_GET['ajax']))
+				//$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 		}
 		else
 			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');

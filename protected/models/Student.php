@@ -34,6 +34,14 @@ class Student extends CActiveRecord
 		return 'student';
 	}
 
+	public function defaultScope()
+    {
+        $alias = $this->getTableAlias(false,false).".";
+        return array(
+            'condition'=>$alias.'status !="D"',
+        );
+    }
+
 	/**
 	 * @return array validation rules for model attributes.
 	 */

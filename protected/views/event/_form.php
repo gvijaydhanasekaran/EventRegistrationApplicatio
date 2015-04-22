@@ -10,11 +10,11 @@
 
 	<?php //echo $form->textFieldGroup($model,'courseId',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5')))); ?>
 
-	<div class="control-group">
-		<?php echo $form -> labelEx($model, 'courseId', array('class' => 'control-label')); ?>
-		<div class="controls">
+	<div class="form-group">
+		<?php echo $form -> labelEx($model, 'courseId', array('class' => 'col-sm-3 control-label ')); ?>
+		<div class="col-sm-9">
 			<?php
-				$CourseArray = Event::getCourseList();
+				$CourseArray = Course::getCourseList();
 
 			$form -> widget('bootstrap.widgets.TbSelect2', 
 				array(
@@ -25,7 +25,7 @@
 					'htmlOptions' => array(
 						//'empty'=>'',
 						'placeholder' => "Select Course", 
-						'style' => 'width:380px;', 
+						'style' => 'width:400px;', 
 						'id' => 'courseId',
 						'class'=>'span5',
 					), 
@@ -37,7 +37,43 @@
 
 	<?php echo $form->textFieldGroup($model,'eventname',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5','maxlength'=>200)))); ?>
 
-	<?php echo $form->textFieldGroup($model,'eventtime',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5')))); ?>
+	<?php //echo $form->textFieldGroup($model,'eventtime',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5')))); ?>
+	<div class="form-group">
+		<?php echo $form -> labelEx($model, 'eventtime', array('class' => 'col-sm-3 control-label')); ?>
+		<div class="col-sm-9">
+			<?php $this->widget('ext.EJuiDateTimePicker.EJuiDateTimePicker',array(
+											'model'=>$model,
+											'attribute'=>'eventtime',
+											'options'=>array(
+												'changeMonth'=>'false',
+												'changeYear'=>'false',
+												'dateFormat'=>'dd/mm/yy',
+												'timeOnly'=>true,
+												//'ampm'=> true,
+												'showHour'   => true,
+												'showMinute' => true,
+												'showSecond' => true,                    
+							                    'timeFormat'=>'hh:mm:ss tt',
+												//'showOn'=>'button',
+												//'showButtonPanel'=>false,
+												//'buttonText'=>'<i class="icon-calendar"></i>',
+												//'yearRange'=>'1960:'.date('Y'),
+												'yearRange'=>'1950:2023',
+												'hour'=>'00',
+												'minute'=>'00',
+												'stepMinute'=>15,
+												'stepSecond'=>60,
+											),
+											'htmlOptions'=>array(
+												'style'=>'height:20px; width:100px;',
+												'readOnly'=>'true',
+												//'value'=> ($model->workdays[$i] ? $model->workdays[$i]['openingTime']:"09:00"),
+											),
+										));
+										?>
+			<?php echo $form -> error($model, 'collegeId'); ?>
+		</div>
+	</div>	
 
 	<?php echo $form->textFieldGroup($model,'amount',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5')))); ?>
 

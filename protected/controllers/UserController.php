@@ -69,9 +69,15 @@ class UserController extends Controller
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
-			if($model->save())
-				//$this->redirect(array('view','id'=>$model->id));
-				$this->redirect(array('admin'));
+			if($model->save()){
+				// Yii Flash Message starts (will show on layouts/main)
+				if($model->displayname){
+				$msg = 'User <b>"' . $model->displayname . '"</b> saved successfully!';
+				Yii::app()->user->setFlash('success', $msg);
+				}
+				// Yii Flash Message ends (will show on layouts/main)
+				$this -> redirect(array('admin'));
+			}
 		}
 
 		$this->render('create',array(
@@ -95,9 +101,15 @@ class UserController extends Controller
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
-			if($model->save())
-			//$this->redirect(array('view','id'=>$model->id));
-			$this->redirect(array('admin'));
+			if($model->save()){
+				// Yii Flash Message starts (will show on layouts/main)
+				if($model->displayname){
+				$msg = 'User <b>"' . $model->displayname . '"</b> updated successfully!';
+				Yii::app()->user->setFlash('success', $msg);
+				}
+				// Yii Flash Message ends (will show on layouts/main)
+				$this -> redirect(array('admin'));
+			}
 		}
 
 		$this->render('update',array(
@@ -112,17 +124,32 @@ class UserController extends Controller
 	*/
 	public function actionDelete($id)
 	{
-		if(Yii::app()->request->isPostRequest)
-		{
-		// we only allow deletion via POST request
-		$this->loadModel($id)->delete();
+		
+		//$this->loadModel($id)->delete();
 
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-		}
-		else
-			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+		if(Yii::app()->request->isPostRequest){
+				// we only allow deletion via POST request
+				if(Yii::app()->user->id != $id){
+					$model = $this->loadModel($id);
+					$model->status='D';
+					$model->save(false);
+
+					// Yii Flash Message starts (will show on controller/admin)
+					$msg = 'User "' . $model->displayname . '" deleted successfully!';
+					echo "<div id='delAlert' class='alert alert-success'>$msg<button type='button' class='close' data-dismiss='alert'>×</button></div>";
+					// Yii Flash Message ends (will show on controller/admin)
+				}else{
+					// Yii Flash Message starts (will show on controller/admin)
+					$msg = 'Current User profile was not allow to delete';
+					echo "<div id='delAlert' class='alert alert-info'>$msg<button type='button' class='close' data-dismiss='alert'>×</button></div>";
+					// Yii Flash Message ends (will show on controller/admin)					
+				}
+
+				// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+				//if(!isset($_GET['ajax']))
+				//	$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			}else
+				throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
 	}
 
 	/**
