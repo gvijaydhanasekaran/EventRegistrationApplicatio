@@ -71,15 +71,15 @@
 	<?php //echo $form->textFieldGroup($model,'modifiedAt',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5')))); ?>
 
 	<?php
-        if($model->id){
-            $selectedEvents = array_keys(CHtml::listData( StudentEvents::model()->findAllByAttributes(array('studentId'=>$model->id)), 'eventId' , 'eventId'));
-            
-            $ugEvents = Event::model()->findAllByAttributes(array('courseId'=>$model->courseId));
-        }else{
-            $selectedEvents=array();
+		$selectedEvents=array();
+		$ugEvents = Event::model()->findAllByAttributes(array('courseId'=>1));
 
-            $ugEvents = Event::model()->findAllByAttributes(array('courseId'=>1));
-        }
+		if (isset($_POST['selectedEvents'])) {
+			$selectedEvents = $_POST['selectedEvents'];
+	
+		} else if($model->id) {
+            $selectedEvents = array_keys(CHtml::listData( StudentEvents::model()->findAllByAttributes(array('studentId'=>$model->id)), 'eventId' , 'eventId'));
+		}
     ?>
 
 	<div class="form-group">
