@@ -72,7 +72,7 @@
 
 	<?php
 		$selectedEvents=array();
-		$ugEvents = Event::model()->findAllByAttributes(array('courseId'=>1));
+		$ugEvents = Event::model()->findAllByAttributes(array('courseId'=>$model->courseId));
 
 		if (isset($_POST['selectedEvents'])) {
 			$selectedEvents = $_POST['selectedEvents'];
