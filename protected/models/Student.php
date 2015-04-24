@@ -16,6 +16,9 @@
  */
 class Student extends CActiveRecord
 {
+	public $courseSearch;
+	public $instituteSearch;
+	public $event;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -57,7 +60,7 @@ class Student extends CActiveRecord
 			array('createdAt, modifiedAt', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, studentname, collegeId, courseId, createdBy, createdAt, updatedBy, modifiedAt, status', 'safe', 'on'=>'search'),
+			array('id, studentname, collegeId, courseId, createdBy, createdAt, updatedBy, modifiedAt, status, courseSearch, instituteSearch', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -69,6 +72,8 @@ class Student extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'courseRel'=>array(self::BELONGS_TO, 'Course', 'courseId'),
+			'instituteRel'=>array(self::BELONGS_TO, 'Institute', 'collegeId'),
 		);
 	}
 
@@ -80,13 +85,16 @@ class Student extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'studentname' => 'Studentname',
-			'collegeId' => 'College',
+			'collegeId' => 'Institute',
 			'courseId' => 'Course',
 			'createdBy' => 'Created By',
 			'createdAt' => 'Created At',
 			'updatedBy' => 'Updated By',
 			'modifiedAt' => 'Modified At',
 			'status' => 'Status',
+			'courseSearch' =>"Course",			
+			'instituteSearch' => 'Institute',
+			'event' => 'Event',
 		);
 	}
 
@@ -101,18 +109,48 @@ class Student extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('studentname',$this->studentname,true);
-		$criteria->compare('collegeId',$this->collegeId);
-		$criteria->compare('courseId',$this->courseId);
-		$criteria->compare('createdBy',$this->createdBy);
-		$criteria->compare('createdAt',$this->createdAt,true);
-		$criteria->compare('updatedBy',$this->updatedBy);
-		$criteria->compare('modifiedAt',$this->modifiedAt,true);
-		$criteria->compare('status',$this->status,true);
+		$criteria->with = array('courseRel','instituteRel');
+		//$criteria->with = array('instituteRel');
+
+		$criteria->compare('t.id',$this->id);
+		$criteria->compare('t.studentname',$this->studentname,true);
+		$criteria->compare('t.collegeId',$this->collegeId);
+		$criteria->compare('t.courseId',$this->courseId);
+		$criteria->compare('t.createdBy',$this->createdBy);
+		$criteria->compare('t.createdAt',$this->createdAt,true);
+		$criteria->compare('t.updatedBy',$this->updatedBy);
+		$criteria->compare('t.modifiedAt',$this->modifiedAt,true);
+		$criteria->compare('t.status',$this->status,true);
+
+		$criteria->compare('courseRel.coursename',$this->courseSearch,true);
+		$criteria->compare('instituteRel.institutename',$this->instituteSearch,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'sort'=>array(
+				'attributes'=>array(
+					'id'=>array(
+						'asc'=>'t.id',
+						'desc'=>'t.id desc',
+					),
+					'studentname'=>array(
+						'asc'=>'t.studentname',
+						'desc'=>'t.studentname desc',
+					),
+					'courseSearch'=>array(
+						'asc'=>'courseRel.coursename',
+						'desc'=>'courseRel.coursename desc',
+					),
+					'instituteSearch'=>array(
+						'asc'=>'instituteRel.institutename',
+						'desc'=>'instituteRel.institutename desc',
+					),
+					'status'=>array(
+						'asc'=>'t.status',
+						'desc'=>'t.status desc',
+					),
+				)
+			)
 		));
 	}
 	protected function beforeSave()

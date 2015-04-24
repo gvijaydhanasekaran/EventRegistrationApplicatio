@@ -13,7 +13,7 @@ array('label'=>'Manage Student','url'=>array('admin')),
 <div class="row">
      <!-- page header -->
     <div class="col-lg-12">
-        <h1 class="page-header">Add Student</h1>
+        <h1 class="page-header">Add New Participant</h1>
     </div>
     <!--end page header -->
 </div>

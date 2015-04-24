@@ -16,7 +16,7 @@ $this->breadcrumbs=array(
 <div class="row">
      <!-- page header -->
     <div class="col-lg-12">
-        <h1 class="page-header">Update Student <?php echo $model->id; ?></h1>
+        <h1 class="page-header">Update Participant <?php echo $model->id; ?></h1>
     </div>
     <!--end page header -->
 </div>

@@ -1,6 +1,6 @@
 <?php
 
-class StudentController extends Controller
+class ReportController extends Controller
 {
 	/**
 	* @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -31,7 +31,7 @@ class StudentController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'ajaxgetcourseevents'),
+				'actions'=>array('institutewise','eventwise','DynamicEvents'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -42,6 +42,120 @@ class StudentController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+
+	public function actionInstitutewise(){
+		$model=new Student;
+		if(isset($_POST['Student']))
+		{
+			$this->layout = '//layouts/print';
+			$postModel = new Student;
+			$postModel->attributes=$_POST['Student'];
+
+
+			if($postModel->collegeId && $postModel->courseId){
+				$model = Student::model()->findAllByAttributes(
+												array('collegeId'=>$postModel->collegeId,
+													  'courseId'=>$postModel->courseId
+													  )
+												);
+			}elseif ($postModel->collegeId) {
+				$model = Student::model()->findAllByAttributes(
+												array('collegeId'=>$postModel->collegeId,)
+												);
+			}else{
+				$model = Student::model()->findAllByAttributes(
+												array('courseId'=>$postModel->courseId,)
+												);				
+			}
+
+			//print_r($model);
+			$this->render('institutewiseReport',array(
+						'model'=>$model,
+						'collegeId'=>$postModel->collegeId?:"",
+						'courseId'=>$postModel->courseId?:"",));
+			exit();
+		}	
+		$this->render('institutewise',
+			array('model'=>$model));
+	}
+
+	public function actionEventwise(){
+		$model=new Student;
+		if(isset($_POST['Student']))
+		{
+			$eventId = null;
+			$this->layout = '//layouts/print';
+			$postModel = new Student;
+			$postModel->attributes=$_POST['Student'];
+			
+
+			if(!empty($_POST['Student']['event'])){
+				$eventId = $_POST['Student']['event'];
+			}		
+
+
+			if($eventId){
+				$model = StudentEvents::model()->findAllByAttributes(
+												array('eventId'=>$eventId,)
+												);				
+			}
+
+			//print_r($model);exit();
+			if(count($model)>1){
+				//exit();
+			$this->render('eventwiseReport',array(
+						'model'=>$model,
+						'courseId'=>$postModel->courseId?:"",
+						'eventId'=>$eventId?:"",));
+			}else{
+				// Yii Flash Message starts (will show on layouts/main)
+				$msg = 'No Records Found';
+				Yii::app()->user->setFlash('success', $msg);
+				
+				// Yii Flash Message ends (will show on layouts/main)
+
+				$model=new Student;
+				$this->layout = "//layouts/column1"; 
+				$this->render('eventwise',
+					array('model'=>$model));				
+			}
+			exit();
+		}	
+		$this->render('eventwise',
+			array('model'=>$model));
+	}
+
+	public function actionDynamicEvents()
+	{
+		$data = Event::model()->findAll('status=:status AND courseId=:courseId', 
+                  array(':status'=>'A', ':courseId'=>(int) $_POST['data']));
+
+ 		/*array_unshift($data, "");
+		$data=CHtml::listData($data,'id','name');
+	    foreach($data as $value=>$name)
+	    {
+	        echo CHtml::tag('option',
+	                   array('value'=>$value),CHtml::encode($name),true);
+	    }*/
+		$responseArr = array();
+		$storesArr = array();
+		$storesArr[] = CHtml::tag('option',
+							   array('value'=>''),'',true);			
+	    foreach($data as $store)
+	    {
+			
+				$eventId = $store['id'];
+				$eventName = $store['eventname'];
+				$storesArr[] = CHtml::tag('option',
+									   array('value'=>$eventId),CHtml::encode($eventName),true);			
+			
+	    }
+		$responseArr['Events'] = $storesArr;
+		
+        echo CJSON::encode($responseArr);
+        Yii::app()->end();
 	}
 
 	/**

@@ -176,5 +176,15 @@ class Event extends CActiveRecord
 		return parent::beforeSave();
 	}
 
-	
+	public static function getEventList($courseId)
+    {
+        $arr = Yii::app()->db->createCommand()
+		                                 ->Select('id, eventname')
+										 ->from('event')
+										 ->where('status=:status AND courseId=:courseId', array(':status'=>'A', ':courseId'=>$courseId))
+										 ->queryAll();
+        array_unshift($arr, "------");        
+        
+        return $arr;
+    }
 }

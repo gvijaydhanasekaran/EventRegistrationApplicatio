@@ -32,7 +32,7 @@ class SiteController extends Controller
 		if(Yii::app()->user->isGuest){
             $this->redirect($this->createUrl('login'));
         }else{
-            $this->render('index');
+            $this->render('dashboard');
         }
 		
 	}
@@ -111,5 +111,16 @@ class SiteController extends Controller
 	{
 		Yii::app()->user->logout();
 		$this->redirect($this->createUrl('login'));
+	}
+
+	public function actionHelp()
+	{
+		$this->render('help');
+	}
+
+	public function actionDashboard()
+	{
+		//print_r(Student::model()->count("t.status = 'A'"));exit();
+		$this->render('dashboard');
 	}
 }

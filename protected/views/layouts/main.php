@@ -28,9 +28,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">
-                	<button class="btn btn-danger btn-circle btn-lg" type="button"><i class="fa fa-heart"></i>
-                            </button> <span style="color:#D2322D">Name</span>
+                <a class="navbar-brand" href="<?php echo Yii::app()->createUrl('site/dashboard'); ?>">
+                	<button class="btn btn-danger btn-circle btn-lg yellow" type="button"><i class="fa fa-heart"></i>
+                            </button> <span style="color:yellow"><?php echo yii::app()->name;?></span>
                 </a>
             </div>
             <!-- end navbar-header -->
@@ -63,8 +63,8 @@
                         </div>
                         <!--end user image section-->
                     </li>
-                    <li class="sidebar-search">
-                        <!-- search section-->
+                    <!-- search section-->
+                    <!-- <li class="sidebar-search">
                         <div class="input-group custom-search-form">
                             <input type="text" class="form-control" placeholder="Search...">
                             <span class="input-group-btn">
@@ -73,23 +73,27 @@
                                 </button>
                             </span>
                         </div>
-                        <!--end search section-->
-                    </li>
+                    </li>-->
+                    <!--end search section-->
                     <li class="selected">
-                        <a href="index.html"><i class="fa fa-dashboard fa-fw"></i>Dashboard</a>
+                        <a href="<?php echo Yii::app()->createUrl('student/create'); ?>"><i class="fa fa-dashboard fa-fw"></i>Add New Participant</a>
                     </li>
+
+
+                    <!-- Participants Link-->
                     <li>
-                        <a href="#"><i class="fa fa-user fa-fw"></i>User<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-thumbs-up fa-fw"></i>Participants<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="<?php echo Yii::app()->createUrl('user/create'); ?>"><i class="fa  fa-pencil"></i>&nbsp;Add New User</a>
+                                <a href="<?php echo Yii::app()->createUrl('student/create'); ?>"><i class="fa  fa-pencil"></i>&nbsp;Add New Participant</a>
                             </li>
                             <li>
-                                <a href="<?php echo Yii::app()->createUrl('user/admin'); ?>"><i class="fa fa-search"></i>&nbsp;All USers</a>
+                                <a href="<?php echo Yii::app()->createUrl('student/admin'); ?>"><i class="fa fa-search"></i>&nbsp;All Participants</a>
                             </li>
                         </ul>
-                        <!-- second-level-items -->
-                    </li>
+                    </li>   
+                    <!-- Participants Link End-->
+
                     <!-- Course Link-->
 					<li>
                         <a href="#"><i class="fa fa-flask fa-fw"></i>Courses<span class="fa arrow"></span></a>
@@ -131,19 +135,39 @@
                     </li>   
                     <!-- Event Link End-->
 
-                    <!-- Participants Link-->
-					<li>
-                        <a href="#"><i class="fa fa-thumbs-up fa-fw"></i>Participants<span class="fa arrow"></span></a>
+                    <!-- Report Link-->
+                    <li>
+                        <a href="#"><i class="fa fa-list fa-fw"></i>Reports<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="<?php echo Yii::app()->createUrl('student/create'); ?>"><i class="fa  fa-pencil"></i>Add New Participant</a>
+                                <a href="<?php echo Yii::app()->createUrl('report/institutewise'); ?>"><i class="fa  fa-list"></i>&nbsp;Institute wise</a>
                             </li>
                             <li>
-                                <a href="<?php echo Yii::app()->createUrl('student/admin'); ?>"><i class="fa fa-search"></i>All Participants</a>
+                                <a href="<?php echo Yii::app()->createUrl('report/eventwise'); ?>"><i class="fa fa-list"></i>&nbsp;Event wise</a>
                             </li>
                         </ul>
                     </li>   
-                    <!-- Participants Link End-->
+                    <!-- Report Link End-->
+
+                    <!-- User Link-->                    
+                    <li>
+                        <a href="#"><i class="fa fa-user fa-fw"></i>User<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="<?php echo Yii::app()->createUrl('user/create'); ?>"><i class="fa  fa-pencil"></i>&nbsp;Add New User</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo Yii::app()->createUrl('user/admin'); ?>"><i class="fa fa-search"></i>&nbsp;All USers</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- User Link End--> 
+
+                    <!-- Help Link--> 
+                    <li class="selected">
+                        <a href="<?php echo Yii::app()->createUrl('site/help'); ?>"><i class="fa fa-warning fa-fw"></i>&nbsp;Help</a>
+                    </li>
+                    <!-- Help Link End--> 
 
                      
                 </ullamcorper>

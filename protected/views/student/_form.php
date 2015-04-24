@@ -25,7 +25,7 @@
 					'options' => array('allowClear' => true, ), 
 					'htmlOptions' => array(
 						//'empty'=>'',
-						'placeholder' => "Select Course", 
+						'placeholder' => "Select Institute", 
 						'style' => 'width:380px;', 
 						'id' => 'collegeId',
 						'class'=>'span5',
@@ -72,7 +72,7 @@
 
 	<?php
 		$selectedEvents=array();
-		$ugEvents = Event::model()->findAllByAttributes(array('courseId'=>$model->courseId));
+		$ugEvents = Event::model()->findAllByAttributes(array('courseId'=>$model->courseId,'status'=>'A'));
 
 		if (isset($_POST['selectedEvents'])) {
 			$selectedEvents = $_POST['selectedEvents'];
@@ -111,6 +111,8 @@
             success:function(data){
             	if (data) {
             		$('#selectedEvents').html(data);
+            	}else{
+            		$('#selectedEvents').html("No Events found.");
             	}
             },
 		});		
