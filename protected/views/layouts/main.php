@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bootsrtap Free Admin Template - SIMINTA | Admin Dashboad Template</title>
+    <title>Event Registration App</title>
     <!-- Core CSS - Include with every page -->
     <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/file/plugins/bootstrap/bootstrap.css" rel="stylesheet" />
     <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/file/font-awesome/css/font-awesome.css" rel="stylesheet" />

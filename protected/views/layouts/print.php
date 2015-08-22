@@ -1,3 +1,4 @@
+<title>Event Registration App</title>
 <style type="text/css">
     body {
         margin: 0;
